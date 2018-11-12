@@ -196,7 +196,9 @@ module Machinery
     end
 
     def kiwi_boot
-      "vmxboot/suse-leap42.1"
+      os_version = version.match(/(\d+)+\.?(\d+)?/)
+      os_id = "#{os_version[1]}.#{os_version[2]}"
+      "vmxboot/suse-#{os_id}"
     end
   end
 
