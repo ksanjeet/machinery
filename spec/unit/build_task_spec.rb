@@ -45,6 +45,23 @@ describe Machinery::BuildTask do
     FileUtils.touch(File.join(output_path, image_file))
   }
 
+  describe "#kiwi_version" do
+    it "returns the KIWI version string" do
+      expect(Cheetah).to receive(:run).with("kiwi", "--version").and_return(
+        "KIWI (next generation) version 9.16.18"
+      )
+      foobar = build_task.kiwi_version
+      expect(foobar).to eq('9.16.18')
+    end
+    
+    it "returns the KIWI version string" do
+      expect(Cheetah).to receive(:run).with("kiwi", "--version").and_return(
+        "vnr: 7.04.8"
+      )
+      expect(build_task.kiwi_version).to eq('7.04.8')
+    end
+  end
+
   describe "#build" do
     it "stores the kiwi config to a temporary directory" do
       build_task.build(system_description, output_path)
@@ -52,8 +69,6 @@ describe Machinery::BuildTask do
     end
 
     it "calls the kiwi wrapper script with sudo to build the image" do
-      expect(Cheetah).to receive(:run).with("rpm", "-q", "kiwi")
-      expect(Cheetah).to receive(:run).with("rpm", "-q", "kiwi-desc-vmxboot")
       expect(Cheetah).to receive(:run) { |*cmd_array|
         expect(cmd_array).to include("sudo")
         expect(cmd_array.index{ |s|
@@ -65,8 +80,6 @@ describe Machinery::BuildTask do
     end
 
     it "handles execution errors gracefully" do
-      expect(Cheetah).to receive(:run).with("rpm", "-q", "kiwi")
-      expect(Cheetah).to receive(:run).with("rpm", "-q", "kiwi-desc-vmxboot")
       expect(Cheetah).to receive(:run) { |*cmd_array|
         expect(cmd_array).to include("sudo")
         expect(cmd_array.index { |s|
@@ -103,11 +116,9 @@ describe Machinery::BuildTask do
     end
 
     it "throws an error if kiwi doesn't exist" do
-      allow(Machinery::LocalSystem).to receive(:validate_existence_of_packages).and_raise(
-        Machinery::Errors::MissingRequirement.new(["kiwi"])
-      )
+      allow(Cheetah).to receive(:run).with("kiwi", "--version").and_raise(Cheetah::ExecutionFailed.new(nil, nil, nil, nil))
       expect{
-        build_task.build(system_description, output_path)
+        build_task.kiwi_version
       }.to raise_error(Machinery::Errors::MissingRequirement, /kiwi/)
     end
 

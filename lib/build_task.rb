@@ -16,10 +16,19 @@
 # you may find current contact information at www.suse.com
 
 class Machinery::BuildTask
+
+  def kiwi_version
+    kiwi_version = Machinery::LoggedCheetah.run("kiwi", "--version")
+    kiwi_version_number = kiwi_version[/\d.\d{2}.\d{1,}/]
+    kiwi_version_number
+  rescue
+    raise Machinery::Errors::MissingRequirement.new("kiwi")
+  end
+
   def build(system_description, output_path, options = {})
     Machinery::LocalSystem.validate_architecture("x86_64")
-    Machinery::LocalSystem.validate_existence_of_packages(["kiwi", "kiwi-desc-vmxboot"])
-    system_description.validate_build_compatibility
+    #system_description.validate_build_compatibility
+
 
     tmp_config_dir = Dir.mktmpdir("machinery-config", "/tmp")
     tmp_image_dir = Dir.mktmpdir("machinery-image", "/tmp")
