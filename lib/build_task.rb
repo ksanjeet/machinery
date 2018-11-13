@@ -19,16 +19,14 @@ class Machinery::BuildTask
 
   def kiwi_version
     kiwi_version = Machinery::LoggedCheetah.run("kiwi", "--version")
-    kiwi_version_number = kiwi_version[/\d.\d{2}.\d{1,}/]
-    kiwi_version_number
+    @@kiwi_version_number = kiwi_version[/\d.\d{2}.\d{1,}/]
   rescue
     raise Machinery::Errors::MissingRequirement.new("kiwi")
   end
 
   def build(system_description, output_path, options = {})
     Machinery::LocalSystem.validate_architecture("x86_64")
-    #system_description.validate_build_compatibility
-
+    system_description.validate_build_compatibility
 
     tmp_config_dir = Dir.mktmpdir("machinery-config", "/tmp")
     tmp_image_dir = Dir.mktmpdir("machinery-image", "/tmp")
@@ -117,9 +115,21 @@ class Machinery::BuildTask
     )
   end
 
-  def kiwi_wrapper(tmp_config_dir, tmp_image_dir, output_path, image_extension)
+  def kiwi_wrapper_version7(tmp_config_dir, tmp_image_dir, output_path, image_extension)
     script = "#!/bin/bash\n"
     script << "/usr/sbin/kiwi --build '#{tmp_config_dir}' --destdir '#{tmp_image_dir}' --logfile '#{tmp_image_dir}/kiwi-terminal-output.log'\n"
+    script << "if [ $? -eq 0 ]; then\n"
+    script << "  mv '#{tmp_image_dir}/'*.#{image_extension} '#{output_path}'\n"
+    script << "  rm -rf '#{tmp_image_dir}'\n"
+    script << "else\n"
+    script << "  echo -e 'Building the Image with Kiwi failed.\nThe Kiwi build directory #{tmp_image_dir} was not removed.'\n"
+    script << "fi\n"
+    script << "rm -rf '#{tmp_config_dir}'\n"
+  end
+
+  def kiwi_wrapper_version9(tmp_config_dir, tmp_image_dir, output_path, image_extension)
+    script = "#!/bin/bash\n"
+    script << "/usr/bin/kiwicompat --build '#{tmp_config_dir}' --dest-dir '#{tmp_image_dir}' --logfile '#{tmp_image_dir}/kiwi-terminal-output.log'\n"
     script << "if [ $? -eq 0 ]; then\n"
     script << "  mv '#{tmp_image_dir}/'*.#{image_extension} '#{output_path}'\n"
     script << "  rm -rf '#{tmp_image_dir}'\n"
@@ -132,7 +142,11 @@ class Machinery::BuildTask
   def write_kiwi_wrapper(tmp_config_dir, tmp_image_dir, output_path, image_extension)
     begin
       script = Tempfile.new('machinery-kiwi-wrapper-script')
-      script << kiwi_wrapper(tmp_config_dir, tmp_image_dir, output_path, image_extension)
+      if @@kiwi_version_number.start_with?('7')
+        script << kiwi_wrapper_version7(tmp_config_dir, tmp_image_dir, output_path, image_extension)
+      elsif @@kiwi_version_number.start_with?('9')
+        script << kiwi_wrapper_version9(tmp_config_dir, tmp_image_dir, output_path, image_extension)
+      end
     ensure
       script.close unless script == nil
     end

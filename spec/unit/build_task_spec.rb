@@ -38,6 +38,8 @@ describe Machinery::BuildTask do
     allow_any_instance_of(Machinery::Os).to receive(:architecture).and_return("x86_64")
     allow(Dir).to receive(:mktmpdir).
       with("machinery-config", "/tmp").and_return(tmp_config_dir)
+    allow(Cheetah).to receive(:run).with("kiwi", "--version").and_return(
+      "KIWI (next generation) version 9.16.18")
     allow(Dir).to receive(:mktmpdir).
       with("machinery-image", "/tmp").and_return(tmp_image_dir)
     allow_any_instance_of(Machinery::SystemDescription).to receive(:validate_build_compatibility)
@@ -117,7 +119,7 @@ describe Machinery::BuildTask do
 
     it "throws an error if kiwi doesn't exist" do
       allow(Cheetah).to receive(:run).with("kiwi", "--version").and_raise(Cheetah::ExecutionFailed.new(nil, nil, nil, nil))
-      expect{
+     expect{
         build_task.kiwi_version
       }.to raise_error(Machinery::Errors::MissingRequirement, /kiwi/)
     end
@@ -196,7 +198,7 @@ describe Machinery::BuildTask do
 
   describe "#kiwi_wrapper" do
     it "generates a script to build and clean up later on" do
-      script = build_task.kiwi_wrapper(tmp_config_dir, tmp_image_dir,
+      script = build_task.kiwi_wrapper_version7(tmp_config_dir, tmp_image_dir,
         output_path, image_extension)
       expect(script).to include("kiwi")
       expect(script).to include("mv")
@@ -218,5 +220,24 @@ describe Machinery::BuildTask do
         end
       end
     end
+
+    it "uses /usr/sbin/kiwi for Kiwi version 7" do
+      script = build_task.kiwi_wrapper_version7(tmp_config_dir, tmp_image_dir,
+        output_path, image_extension)
+      allow(Cheetah).to receive(:run).with("kiwi", "--version").and_return(
+          "vnr: 7.04.8"
+        )
+      expect(script).to include("/usr/sbin/kiwi")
+    end
+
+    it "uses /usr/bin/kiwi for Kiwi version 9" do
+      script = build_task.kiwi_wrapper_version9(tmp_config_dir, tmp_image_dir,
+        output_path, image_extension)
+      allow(Cheetah).to receive(:run).with("kiwi", "--version").and_return(
+          "KIWI (next generation) version 9.16.18"
+        )
+      expect(script).to include("/usr/bin/kiwi")
+    end
+
   end
 end
