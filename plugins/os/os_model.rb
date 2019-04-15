@@ -41,6 +41,11 @@ module Machinery
         os.name = os_name
         return os
       end
+      if os_name =~ /Red Hat|CentOS/
+        os = OsRedhat.new
+        os.name = os_name
+        return os
+      end      
       os = OsUnknown.new
       os.name = os_name
       os
@@ -111,6 +116,27 @@ module Machinery
                 "#{os_version[1]}.#{os_version[2]}"
       end
       "vmxboot/suse-#{os_id}"
+    end
+  end
+
+  class OsRedhat < Os
+    def self.canonical_name
+      "RedHat/CentOS Linux"
+    end
+
+    def kiwi_bootloader
+      "grub2"
+    end
+
+    def kiwi_boot
+      os_version = version.match(/(\d+)+\.?(\d+)?/)
+      os_id = case name
+              when /Red Hat Enterprise Linux Server/
+                "RHEL#{os_version[1]}"
+              when /CentOS Linux/
+                "#{os_version[1]}.#{os_version[2]}"
+      end
+      "vmxboot/el-#{os_id}"
     end
   end
 
@@ -200,7 +226,13 @@ module Machinery
     end
   end
 
-  class Rhel < Os
+  class Centos < OsRedhat
+    def self.canonical_name
+      "CentOS Linux"
+    end
+  end
+
+  class Rhel < OsRedhat
     def self.canonical_name
       "Red Hat Enterprise Linux Server"
     end

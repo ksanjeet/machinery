@@ -373,6 +373,20 @@ EOF
       "architecture": "x86_64"
     }
   EOF
+  EXAMPLE_SCOPES["os_centos7"] = <<-EOF.chomp
+    "os": {
+      "name": "CentOS Linux 7 (Core)",
+      "version": "7 (Core)",
+      "architecture": "x86_64"
+    }
+  EOF
+  EXAMPLE_SCOPES["os_redhat7"] = <<-EOF.chomp
+    "os": {
+      "name": "RedHat Enterprise Linux 7",
+      "version": "7",
+      "architecture": "x86_64"
+    }
+  EOF
   EXAMPLE_SCOPES["empty_packages"] = <<-EOF.chomp
     "packages": {
       "_attributes": {

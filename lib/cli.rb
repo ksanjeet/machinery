@@ -325,8 +325,6 @@ module Machinery
       end
     end
 
-
-
     desc "Build image from system description"
     long_desc <<-LONGDESC
       Build image from a given system description and store it to the given
@@ -361,8 +359,6 @@ module Machinery
         )
       end
     end
-
-
 
     desc "Compare system descriptions"
     long_desc <<-LONGDESC
@@ -432,8 +428,6 @@ module Machinery
       end
     end
 
-
-
     desc "Copy system description"
     long_desc <<-LONGDESC
       Copy a system description.
@@ -467,7 +461,6 @@ module Machinery
         task.move(system_description_store, from, to)
       end
     end
-
 
     desc "Deploy image to OpenStack cloud"
     long_desc <<-LONGDESC
@@ -518,8 +511,6 @@ module Machinery
         )
       end
     end
-
-
 
     desc "Export system description as KIWI image description"
     long_desc <<-LONGDESC
@@ -582,6 +573,39 @@ module Machinery
         task = ExportTask.new(exporter)
         task.export(
           File.expand_path(options["autoyast-dir"]),
+          force: options[:force]
+        )
+      end
+    end
+
+    desc "Export system description a KickStart profile"
+    long_desc <<-LONGDESC
+      Export system description as KickStart profile
+
+      The profile will be placed in a subdirectory at the given location by
+      the 'kickstart-dir' option.
+    LONGDESC
+    arg "NAME"
+    command "export-kickstart" do |c|
+      c.flag ["kickstart-dir", :a],
+        type:     String,
+        required: true,
+        desc:     "Location where the autoyast profile will be stored",
+        arg_name: "DIRECTORY"
+      c.switch :force,
+        default_value: false,
+        required:      false,
+        negatable:     false,
+        desc:          "Overwrite existing directory"
+
+      c.action do |_global_options, options, args|
+        name = shift_arg(args, "NAME")
+        description = SystemDescription.load(name, system_description_store)
+        exporter = Kickstart.new(description)
+
+        task = ExportTask.new(exporter)
+        task.export(
+          File.expand_path(options["kickstart-dir"]),
           force: options[:force]
         )
       end

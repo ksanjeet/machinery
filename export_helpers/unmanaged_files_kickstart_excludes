@@ -1,0 +1,20 @@
+var/lib/rpm/*
+etc/passwd*
+etc/shadow*
+etc/group*
+etc/fstab
+lib/mkinitrd
+etc/udev/rules.d/70-persistent-net.rules
+var/log/*
+etc/default/grub*
+
+#changed by ksanjeet
+boot/*
+etc/systemd/system/*
+usr/lib/debug/usr/*
+usr/lib/*
+usr/lib64/*
+usr/share/*
+var/cache/*
+var/lib/yum/*
+etc/alternatives/*
