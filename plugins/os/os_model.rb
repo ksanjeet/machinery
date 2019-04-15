@@ -121,22 +121,11 @@ module Machinery
 
   class OsRedhat < Os
     def self.canonical_name
-      "RedHat/CentOS Linux"
+      "Red Hat Enterprise Linux"
     end
 
-    def kiwi_bootloader
-      "grub2"
-    end
-
-    def kiwi_boot
-      os_version = version.match(/(\d+)+\.?(\d+)?/)
-      os_id = case name
-              when /Red Hat Enterprise Linux Server/
-                "RHEL#{os_version[1]}"
-              when /CentOS Linux/
-                "#{os_version[1]}.#{os_version[2]}"
-      end
-      "vmxboot/el-#{os_id}"
+    def display_name
+      "#{name} (#{architecture})"
     end
   end
 

@@ -382,7 +382,7 @@ EOF
   EOF
   EXAMPLE_SCOPES["os_redhat7"] = <<-EOF.chomp
     "os": {
-      "name": "RedHat Enterprise Linux 7",
+      "name": "Red Hat Enterprise Linux Server 7",
       "version": "7",
       "architecture": "x86_64"
     }

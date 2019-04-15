@@ -92,8 +92,8 @@ class Machinery::Kickstart < Machinery::Exporter
       f.write(apply_groups)
       f.write(apply_services_enabled)
       f.write(apply_services_disabled)
-#      apply_changed_files("changed_config_files")
-#      apply_changed_files("changed_managed_files")
+      apply_changed_files("changed_config_files")
+      apply_changed_files("changed_managed_files")
       apply_unmanaged_files
       f.write(apply_url_extraction)
       f.write("\n%post --nochroot --log=/mnt/sysimage/root/post-install.log \n")

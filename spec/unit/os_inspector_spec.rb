@@ -64,7 +64,7 @@ describe Machinery::OsInspector do
       os = inspector.send(:get_os_from_os_release)
 
       expect(os).to eq(
-        Machinery::OsUnknown.new(
+        Machinery::OsRedhat.new(
           name: "Red Hat Enterprise Linux Server 7.0 (Maipo)",
           version: "7.0 (Maipo)"
         )

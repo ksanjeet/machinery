@@ -33,7 +33,7 @@ describe Machinery::Kickstart do
         "unmanaged_files"
       ],
       scopes: [
-        "os",
+        "os_redhat7",
         "packages",
         "patterns",
         "repositories",
@@ -73,16 +73,14 @@ describe Machinery::Kickstart do
           target: "/opt/test-quote-char/target-with-quote'-foo"
         )
       kickstart = Machinery::Kickstart.new(description)
-
-      expect(kickstart.profile).to include(
+      expect(kickstart.profile(given_directory)).to include(
         "ln -s '/opt/test-quote-char/target-with-quote'\\\''-foo' '/mnt/opt/test-quote-char/link'"
       )
     end
 
     it "creates the expected profile" do
       kickstart = Machinery::Kickstart.new(description)
-
-      expect(kickstart.profile).to eq(expected_profile)
+      expect(kickstart.profile(given_directory)).to eq(expected_profile)
     end
 
     it "does not ask for export URL if files weren't extracted" do
@@ -95,7 +93,7 @@ describe Machinery::Kickstart do
       end
       kickstart = Machinery::Kickstart.new(description)
 
-      expect(kickstart.profile).not_to include("Enter URL to system description")
+      expect(kickstart.profile(given_directory)).not_to include("Enter URL to system description")
     end
   end
 
@@ -107,7 +105,7 @@ describe Machinery::Kickstart do
       allow(kickstart).to receive(:outgoing_ip).and_return(ip)
       kickstart.write(@output_dir)
       expect(captured_machinery_output).to include(
-        "Note: The permssions of the AutoYaST directory are restricted to be only" \
+        "Note: The permssions of the KickStart directory are restricted to be only" \
           " accessible by the current user. Further instructions are provided by the " \
           "README.md in the exported directory."
       )
