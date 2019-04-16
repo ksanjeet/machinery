@@ -33,10 +33,9 @@ describe Machinery::Kickstart do
         "unmanaged_files"
       ],
       scopes: [
-        "os_redhat7",
-        "packages",
-        "patterns",
-        "repositories",
+        "os_centos7",
+        "packages_centos7",
+        "yum_repositories",
         "users_with_passwords",
         "groups",
         "services"
@@ -75,7 +74,7 @@ describe Machinery::Kickstart do
       kickstart = Machinery::Kickstart.new(description)
       @output_dir = given_directory
       kickstart.profile(@output_dir)
-      generated_profile = File.read(File.join(@output_dir,"ks.cfg"))      
+      generated_profile = File.read(File.join(@output_dir,"ks.cfg"))
       expect(generated_profile).to include(
         "ln -s '/opt/test-quote-char/target-with-quote'\\\''-foo' '/mnt/opt/test-quote-char/link'"
       )
@@ -85,7 +84,7 @@ describe Machinery::Kickstart do
       kickstart = Machinery::Kickstart.new(description)
       @output_dir = given_directory
       kickstart.profile(@output_dir)
-      generated_profile = File.read(File.join(@output_dir,"ks.cfg"))      
+      generated_profile = File.read(File.join(@output_dir,"ks.cfg"))
       expect(generated_profile).to eq(expected_profile)
     end
 

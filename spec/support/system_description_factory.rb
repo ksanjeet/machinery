@@ -428,6 +428,39 @@ EOF
       ]
     }
   EOF
+  EXAMPLE_SCOPES["packages_centos7"] = <<-EOF.chomp
+    "packages": {
+      "_attributes": {
+        "package_system": "rpm"
+      },
+      "_elements": [
+        {
+          "name": "NetworkManager",
+          "version": "1.12.0",
+          "release": "6.el7",
+          "arch": "x86_64",
+          "vendor": "CentOS",
+          "checksum": "a455bd6b20c3c9befa06f0126fa0a69c"
+        },      
+        {
+          "name": "bash",
+          "version": "4.2.46",
+          "release": "31.el7",
+          "arch": "x86_64",
+          "vendor": "CentOS",
+          "checksum": "ed4d986a9753c79474e6ab726f40d864"
+        },	
+        {
+          "name": "centos-release",
+          "version": "7",
+          "release": "6.1810.2.el7.centos",
+          "arch": "x86_64",
+          "vendor": "CentOS",
+          "checksum": "9f661612be55e8bb73f78163a41df816"
+        }	
+      ]
+    }
+  EOF
   EXAMPLE_SCOPES["packages2"] = <<-EOF.chomp
     "packages": {
       "_attributes": {
