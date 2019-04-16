@@ -73,14 +73,20 @@ describe Machinery::Kickstart do
           target: "/opt/test-quote-char/target-with-quote'-foo"
         )
       kickstart = Machinery::Kickstart.new(description)
-      expect(kickstart.profile(given_directory)).to include(
+      @output_dir = given_directory
+      kickstart.profile(@output_dir)
+      generated_profile = File.read(File.join(@output_dir,"ks.cfg"))      
+      expect(generated_profile).to include(
         "ln -s '/opt/test-quote-char/target-with-quote'\\\''-foo' '/mnt/opt/test-quote-char/link'"
       )
     end
 
     it "creates the expected profile" do
       kickstart = Machinery::Kickstart.new(description)
-      expect(kickstart.profile(given_directory)).to eq(expected_profile)
+      @output_dir = given_directory
+      kickstart.profile(@output_dir)
+      generated_profile = File.read(File.join(@output_dir,"ks.cfg"))      
+      expect(generated_profile).to eq(expected_profile)
     end
 
     it "does not ask for export URL if files weren't extracted" do
@@ -92,8 +98,10 @@ describe Machinery::Kickstart do
         description[scope].extracted = false
       end
       kickstart = Machinery::Kickstart.new(description)
-
-      expect(kickstart.profile(given_directory)).not_to include("Enter URL to system description")
+      @output_dir = given_directory
+      kickstart.profile(@output_dir)
+      generated_profile = File.read(File.join(@output_dir,"ks.cfg"))
+      expect(generated_profile).not_to include("Enter URL to system description")
     end
   end
 
