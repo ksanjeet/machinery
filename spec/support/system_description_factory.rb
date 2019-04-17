@@ -352,6 +352,21 @@ EOF
       ]
     }
   EOF
+  EXAMPLE_SCOPES["groups_centos"] = <<-EOF.chomp
+    "groups": {
+      "_elements": [
+        {
+          "name": "audio",
+          "password": "x",
+          "gid": 63,
+          "users": [
+  
+          ]
+        }
+      ]
+    }
+  EOF
+
   EXAMPLE_SCOPES["os"] = <<-EOF.chomp
     "os": {
       "name": "openSUSE 13.1 (Bottle)",
@@ -758,6 +773,29 @@ EOF
       ]
     }
   EOF
+  EXAMPLE_SCOPES["centos7_repo"] = <<-EOF.chomp
+    "repositories": {
+      "_attributes": {
+        "repository_system": "yum"
+      },
+      "_elements": [
+        {
+        "name": "CentOS-7.0.1406 - Base",
+        "url": [
+          "http://vault.centos.org/7.0.1406/os/x86_64/"
+        ],
+        "gpgkey": [
+          "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7"
+        ],
+        "enabled": false,
+        "alias": "C7.0.1406-base",
+        "mirrorlist": "",
+        "gpgcheck": true,
+        "type": "rpm-md"	
+        }
+      ]
+    }
+  EOF
   EXAMPLE_SCOPES["users"] = <<-EOF.chomp
     "users": {
       "_attributes": {},
@@ -829,6 +867,27 @@ EOF
       ]
     }
   EOF
+
+  EXAMPLE_SCOPES["users_with_passwords_centos"] = <<-EOF.chomp
+    "users": {
+      "_elements": [
+        {
+          "name": "root",
+          "password": "x",
+          "uid": 0,
+          "gid": 0,
+          "comment": "root",
+          "home": "/root",
+          "shell": "/bin/bash",
+          "encrypted_password": "$6$AIiDNWaAtAAbxkrZ$gmlfzz62t8ICZp1EnrL0cGk65DM6JkaXEIiRyvIWS9Dg15D0BZtKu0JqYEXZnqZ32FfrbTEYa4aqA0KzOgQoZ.",
+          "min_days": 0,
+          "max_days": 99999,
+          "warn_days": 7
+        }
+      ]
+    }
+  EOF
+
   EXAMPLE_SCOPES["empty_services"] = <<-EOF.chomp
     "services": {
       "_attributes": {
@@ -858,6 +917,10 @@ EOF
           "state": "enabled"
         },
         {
+          "name": "NetworkManager.service",
+          "state": "enabled"
+        },	
+        {
           "name": "rsyncd.service",
           "state": "disabled"
         },
@@ -865,6 +928,22 @@ EOF
           "name": "lvm2-lvmetad.socket",
           "state": "disabled"
         },
+        {
+          "name": "tuned.service",
+          "state": "enabled"
+        },
+        {
+          "name": "rsyncd.socket",
+          "state": "disabled"
+        },
+        {
+          "name": "wpa_supplicant.service",
+          "state": "disabled"
+        },
+        {
+          "name": "systemd-nspawn@.service",
+          "state": "disabled"
+        },	
         {
           "name": "console-shell.service",
           "state": "static"

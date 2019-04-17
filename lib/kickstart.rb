@@ -96,9 +96,9 @@ class Machinery::Kickstart < Machinery::Exporter
       apply_changed_files("changed_managed_files")
       apply_unmanaged_files
       f.write(apply_url_extraction)
-      f.write("\n%post --nochroot --log=/mnt/sysimage/root/post-install.log \n")
+      f.write("\n%post --nochroot --log=/mnt/sysimage/root/post-install.log\n")
       f.write(@chroot_scripts.join("\n"))
-      f.write("\n%end")
+      f.write("\n%end\n")
     end
  end
 

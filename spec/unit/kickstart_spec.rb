@@ -35,9 +35,9 @@ describe Machinery::Kickstart do
       scopes: [
         "os_centos7",
         "packages_centos7",
-        "yum_repositories",
-        "users_with_passwords",
-        "groups",
+        "centos7_repo",
+        "users_with_passwords_centos",
+        "groups_centos",
         "services"
       ]
     )
