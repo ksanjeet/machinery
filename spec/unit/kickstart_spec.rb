@@ -76,7 +76,7 @@ describe Machinery::Kickstart do
       kickstart.profile(@output_dir)
       generated_profile = File.read(File.join(@output_dir,"ks.cfg"))
       expect(generated_profile).to include(
-        "ln -s '/opt/test-quote-char/target-with-quote'\\\''-foo' '/mnt/opt/test-quote-char/link'"
+        "ln -s '/opt/test-quote-char/target-with-quote'\\\''-foo' '/mnt/sysimage/opt/test-quote-char/link'"
       )
     end
 

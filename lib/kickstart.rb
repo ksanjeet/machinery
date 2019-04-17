@@ -210,22 +210,22 @@ class Machinery::Kickstart < Machinery::Exporter
         @chroot_scripts << "rm -rf '#{quote(file.name)}'"
       elsif file.directory?
         @chroot_scripts << <<EOF.strip
-	chmod #{file.mode} '#{File.join("/mnt/sysimage", quote(file.name))}'
-	chown #{file.user}:#{file.group} '#{File.join("/mnt/sysimage", quote(file.name))}'
+chmod #{file.mode} '#{File.join("/mnt/sysimage", quote(file.name))}'
+chown #{file.user}:#{file.group} '#{File.join("/mnt/sysimage", quote(file.name))}'
 EOF
       elsif file.file?
         url = "`cat /tmp/description_url`/#{URI.escape(File.join(scope, quote(file.name)))}"
         @chroot_scripts << <<EOF.strip
-	mkdir -p '#{File.join("/mnt/sysimage", File.dirname(quote(file.name)))}'
-	curl -o '#{File.join("/mnt/sysimage", quote(file.name))}' \"#{url}\"
-	chmod #{file.mode} '#{File.join("/mnt/sysimage", quote(file.name))}'
-	chown #{file.user}:#{file.group} '#{File.join("/mnt/sysimage", quote(file.name))}'
+mkdir -p '#{File.join("/mnt/sysimage", File.dirname(quote(file.name)))}'
+curl -o '#{File.join("/mnt/sysimage", quote(file.name))}' \"#{url}\"
+chmod #{file.mode} '#{File.join("/mnt/sysimage", quote(file.name))}'
+chown #{file.user}:#{file.group} '#{File.join("/mnt/sysimage", quote(file.name))}'
 EOF
       elsif file.link?
         @chroot_scripts << <<EOF.strip
-	rm -rf '#{File.join("/mnt/sysimage", quote(file.name))}'
-	ln -s '#{quote(file.target)}' '#{File.join("/mnt/sysimage", quote(file.name))}'
-	chown --no-dereference #{file.user}:#{file.group} '#{File.join("/mnt/sysimage", quote(file.name))}'
+rm -rf '#{File.join("/mnt/sysimage", quote(file.name))}'
+ln -s '#{quote(file.target)}' '#{File.join("/mnt/sysimage", quote(file.name))}'
+chown --no-dereference #{file.user}:#{file.group} '#{File.join("/mnt/sysimage", quote(file.name))}'
 EOF
       end
     end
