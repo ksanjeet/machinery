@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2016 SUSE LLC
+# Copyright (c) 2013-2019 SUSE LLC
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of version 3 of the GNU General Public License as
@@ -578,9 +578,9 @@ module Machinery
       end
     end
 
-    desc "Export system description a KickStart profile"
+    desc "Export system description a kickstart profile"
     long_desc <<-LONGDESC
-      Export system description as KickStart profile
+      Export system description as kickstart profile
 
       The profile will be placed in a subdirectory at the given location by
       the 'kickstart-dir' option.
