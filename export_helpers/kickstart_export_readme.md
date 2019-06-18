@@ -5,7 +5,7 @@ Machinery.
 
 The user is expected to be familiar with using KickStart.
 
-## Using the KickStart export
+## Using the kickstart export
 
 The export directory contains both the KickStart profile and additional data that
 is required during installation. This directory needs to be made available to
@@ -16,7 +16,7 @@ the installer via network, e.g. by running:
 You can then point the installer to the profile by specifying the KickStart
 option on the kernel command line. You also need to mention the required setting for setting up network.
 
-For RHEL 6&7 and CentOS 6&7:
+For RHEL 6/7 and CentOS 6/7:
 
   inst.ks=http://<ip>:8000/ks.cfg 
 
@@ -24,7 +24,7 @@ For RHEL 5:
 
   ks=http://<ip>:8000/ks.cfg 
 
-## Changing permissions of the KickStart export
+## Changing permissions of the kickstart export
 
 By default the KickStart export is only accessible by the user. This is also the
 case for all sub directories.
@@ -37,5 +37,4 @@ To make the export directory readable for all users run:
 
 ## Reference
 
-Additional information regarding KickStart is available in the official documentation:
-
+Additional information regarding KickStart is available in the official documentation: https://pykickstart.readthedocs.io/en/latest/kickstart-docs.html
