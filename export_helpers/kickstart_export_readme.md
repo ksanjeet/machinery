@@ -1,4 +1,4 @@
-# README for KickStart export from Machinery
+# README for kickstart export from Machinery
 
 This directory contains an KickStart configuration that was exported by
 Machinery.
